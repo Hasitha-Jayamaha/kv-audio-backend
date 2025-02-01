@@ -22,7 +22,7 @@ app.use(bodyParser.json())
     token = token.replace("Bearer ","");
     console.log(token);
  
-    jwt.verify(token, "kv-secret-89!",
+    jwt.verify(token, process.env.WT_SECRET,
         (err, decoded) => {
             console.log(err);
             if(!err){

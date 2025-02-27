@@ -29,7 +29,7 @@ profilePicture : {
     required : true,
     default : "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png"
 },
-isAooroved : {
+isApproved : {
     type : Boolean,
     required : true,
     default : false

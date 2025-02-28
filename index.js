@@ -64,3 +64,12 @@ app.listen(3000, ()=> {
 // "email": "hasitha2.doe@example.com",
 //"password": "123hashedpassword123",
 //"role": "admin",
+
+//"email": "jane.smith@example.com",
+//"password": "hashed_password_here",
+//"role": "admin",
+
+//"email": "1jane.smith@example.com",
+//"password": "1hashed_password_here",
+//"role": "custermer",
+

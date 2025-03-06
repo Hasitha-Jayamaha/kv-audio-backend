@@ -1,7 +1,8 @@
-import Product from "../models/product.js" ;
+import Product from "../models/product.js";
+import { isItAdmin } from "./userController.js";
 
-export function addProduct(req,res){
-    console.log(req.user)
+export async function addProduct(req,res){
+    
 
     if(req.user == null){
         res.status(401).json({
@@ -18,12 +19,86 @@ export function addProduct(req,res){
 
     const data = req.body;
     const newProduct = new Product(data);
-    newProduct.save()
-    .then(() => {
-        res.json({messege:"Product added successfully"});
-    })
-    .catch((error) => {
-        res.status(500).json({error:"Product addition failed"});
-
-    });
+    
+    try{
+        await newProduct.save();
+        res.json({
+            message : "Product registered succusfully"
+        })
+    }catch(error){
+        res.status(500).json({
+            error : "Product registration failed"
+        })
+    }
 }
+   
+export async function getProduct(req,res){
+
+
+    try{
+
+        if(isItAdmin(req)){
+            const products = await Product.find();
+            res.json(products);
+            return;
+        }else{
+            const products = await Product.find({availability:true});
+            res.json(products);
+            return;
+        }
+    }catch(e){
+         res.status(500).json({
+        messege : "Failed to get products"
+        })
+    }
+}  
+
+export async function updateProduct(req,res){
+    try{
+        if(isItAdmin(req)){
+
+            const key = req.params.key;
+            const data = req.body
+
+            await Product.updateOne({key:key},data)
+
+            res.json({
+            message: "Product updatesd successfully"
+            })
+            return;
+
+
+        }else{
+            res.status(403).json({
+                messegae:"You are not authorized to perform this action"
+            })
+            return;
+        }
+    }catch(e){
+        res.status(500).json({
+            message : "Failed to update product"
+        })
+    }
+}
+
+export async function deleteProduct(req,res){
+    try{
+    if(isItAdmin(req)){
+        const key = req.params.key;
+        await Product.deleteOne({key:key})
+        res.json({
+            message : "Product deleted succesfully"
+        })
+    }else{
+        res.status(403).json({
+            message : "You are not authorized to perform this action"
+        })
+        return;
+    }
+}catch(e){
+    res.status(500).json({
+        message:"Failed to delete product"
+    })
+  }
+}
+ 
